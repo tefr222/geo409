@@ -51,7 +51,7 @@
 <body>
     <header>
         <h1>Map of Kentucky</h1>
-        <h2>With wonderful Elkton</h2>
+        <h2>With Wonderful Elkton</h2>
     </header>
 
     <div id='map'></div>
@@ -82,24 +82,44 @@
         
         // begin writing Task C code here
         var city1Name = "Lexington";
+        console.log(city1Name);
         var city1Lat = 38.0297;
+        console.log(city1Lat);
         var city1Lon = -84.4947;
+        console.log(city1Lon);
         var city1Pop = 308428;
+        console.log(city1Pop);
         var city1Capitol = false;
+        console.log(city1Capitol);
+       console.log(city1Name + "has a latitude of" + city1Lat + "and a longitude of" + city1Lon + "with a population of" + city1Pop);
         var city2Name = "Frankfort";
+        console.log(city2Name);
         var city2Lat = 38.200906;
+        console.log(city2Lat);
         var city2Lon = -84.873284;
+        console.log(city2Lon);
         var city2Pop = 27453;
+        console.log(city2Pop);
         var city2Capitol = true;
+        console.log(city2Capitol);
+        console.log(city2Name + "has a latitude of" + city2Lat + "and a longitude of" + city2Lon + "with a population of" + city2Pop);
+      
         var city3Name = "Elkton";
+        console.log(city3Name);
         var city3Lat = 36.8089;
+        console.log(city3Lat);
         var city3Lon = -87.1564;
+        console.log(city3Lon);
         var city3Pop = 2172;
+        console.log(city3Pop);
         var city3Capitol = false;
+        console.log(city3Capitol);
+        console.log(city3Name + "has a latitude of" + city3Lat + "and a longitude of" + city3Lon + "with a population of" + city3Pop);
+        
         var totalPop = city1Pop + city2Pop + city3Pop;
         console.log(totalPop);
         var averagePop= totalPop / 3
-        
+        console.log(averagePop);
         
         
         
@@ -117,26 +137,26 @@
             .bindPopup(city1Popup);
         
 
-//        var city2Popup = "<b>"+city2Name+"</b><br>"
-//                        +"<b>population</b>: "+city2Pop;
-//        
-//        if(city2Capitol == true) {
-//            city2Popup += "<br>Capitol of the Commonwealth of Kentucky";   
-//        }
-//        
-//        L.marker([city2Lat,city2Lon]).addTo(map)
-//            .bindPopup(city2Popup);
+    var city2Popup = "<b>"+city2Name+"</b><br>"
+                    +"<b>population</b>: "+city2Pop;
+        
+        if(city2Capitol == true) {
+            city2Popup += "<br>Capitol of the Commonwealth of Kentucky";   
+        }
+        
+        L.marker([city2Lat,city2Lon]).addTo(map)
+            .bindPopup(city2Popup);
         
 
-//        var city3Popup = "<b>"+city3Name+"</b><br>"
-//                        +"<b>population</b>: "+city3Pop;
-//        
-//        if(city3Capitol == true) {
-//            city3Popup += "<br>Capitol of the Commonwealth of Kentucky";   
-//        }
-//        
-//        L.marker([city3Lat,city3Lon]).addTo(map)
-//            .bindPopup(city3Popup);
+        var city3Popup = "<b>"+city3Name+"</b><br>"
+                        +"<b>population</b>: "+city3Pop;
+        
+        if(city3Capitol == true) {
+            city3Popup += "<br>Capitol of the Commonwealth of Kentucky";   
+        }
+        
+        L.marker([city3Lat,city3Lon]).addTo(map)
+            .bindPopup(city3Popup);
           
     </script>
     
