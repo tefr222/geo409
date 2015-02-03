@@ -86,16 +86,19 @@
         map.addLayer(tiles);
         
         // begin writing/editing Task D code here
-         var cities=["Lexington", "Frankfort", "Elkton"]
-         var citiesLat=[38.0297, 38.200906, 36.8089]
-         var citiesLon=[-84.4947, -84.873284, -87.1564] 
-         var cityCoords=[cities, citiesLat, citiesLon] 
-         var cityPops=[308428, 27453, 2172]
-         var cityCapitol=[false, true, false]
+         var cities=["Lexington", "Frankfort", "Elkton"];
+        console.log(cities);
+         var cityCoords=[
+             [38.0297, -84.4947],
+             [38.200906, -84.873284],
+             [36.8089, -87.1564]
+         ];
+         var cityPops=[308428, 27453, 2172];
+         var cityCapitol=[false, true, false];
         for(var i=0; i<cities.length+1; i++) {
             
-            var popup = "<b>"+cities+"</b><br>"
-                            +"<b>population</b>: "+cityPops;
+            var popup = "<b>"+cities[i]+"</b><br>"
+                            +"<b>population</b>: "+cityPops[i];
 
             if(cityCapitol == true) {
                
