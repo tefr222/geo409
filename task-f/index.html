@@ -78,8 +78,8 @@
     <script>
 
         var map = L.map('map', {
-            center: [38.96,-85.36],
-            zoom: 8,
+            center: [39.00,-85.36],
+            zoom: 7,
         });
        
         var tiles = L.tileLayer('http://a{s}.acetate.geoiq.com/tiles/acetate-hillshading/{z}/{x}/{y}.png', {
@@ -104,7 +104,7 @@
             { 
                 name: "Colmbus",
                 properties: {
-                    coordinates: [39.9833, 82.9833],
+                    coordinates: [39.9833, -82.9833],
                     population: 822553,
                     state: "OH"
                 }
@@ -112,7 +112,7 @@
             {
                 name: "Evansville",
                 properties: {
-                    coordinates: [37.9772, 87.5506],
+                    coordinates: [37.9772, -87.5506],
                     population: 829833,
                     state: "IN"
                 }
@@ -120,7 +120,36 @@
         ];
         for(var i=0; i<cities.length; i++) {
             var props = cities[i].properties;
-            console.log(props);
+            console.log(props.coordinates);
+           
+            
+            var popup = "I am a temp string value";
+            L.marker(props.coordinates).addTo(map).bindPopup(popup);
+            var name = cities[i].name;
+            var population = props.population;
+            var state = props.state;
+            console.log(props.population);
+            console.log(props.state);
+             
+            
+           
+        }
+        buildPopup(name, population, state);
+        function buildPopup(name, population, state) {
+            if(state=="KY"){
+                var colorClass = "blue" 
+                
+            }
+            else if(state=="IN"){
+                var colorClass = "red";
+        
+            }
+            else if(state=="OH"){
+                var colorClass = "purple"
+      
+            }
+        return "<div class='"+colorClass+"'><b>"+name+"</b><br>"+
+    "<b>Population</b>: "+popup.toLocaleString()+"<div>";
         }
         
         // End code for Task F
