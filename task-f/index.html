@@ -120,24 +120,29 @@
         ];
         for(var i=0; i<cities.length; i++) {
             var props = cities[i].properties;
-            console.log(props.coordinates);
+            //console.log(props.coordinates);
            
             
-            var popup = "I am a temp string value";
-            L.marker(props.coordinates).addTo(map).bindPopup(popup);
+            var popup = cities[i].name;
             var name = cities[i].name;
             var population = props.population;
             var state = props.state;
-            console.log(props.population);
-            console.log(props.state);
-             
+            //console.log(props.population);
+            //console.log(props.state);
+            console.log(name); 
             
-           
+            var popup = buildPopup(name, population, state);
+            L.marker(props.coordinates).addTo(map).bindPopup(popup);
+            
+            
+            
+            
         }
-        buildPopup(name, population, state);
-        function buildPopup(name, population, state) {
+        
+        
+        function buildPopup(name, pop, state) {
             if(state=="KY"){
-                var colorClass = "blue" 
+                var colorClass = "blue"; 
                 
             }
             else if(state=="IN"){
@@ -145,11 +150,14 @@
         
             }
             else if(state=="OH"){
-                var colorClass = "purple"
+                var colorClass = "purple";
       
             }
-        return "<div class='"+colorClass+"'><b>"+name+"</b><br>"+
-    "<b>Population</b>: "+popup.toLocaleString()+"<div>";
+            console.log(colorClass);
+            return "<div class='"+colorClass+"'><b>"+name+"</b><br>"+
+                "<b>Population</b>: "+pop.toLocaleString()+"<div>";
+           
+        
         }
         
         // End code for Task F
