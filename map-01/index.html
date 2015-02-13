@@ -68,7 +68,23 @@
     <script>
 
  // Step 1 and 2 here
+        var options = {
+        center: [-37.8136,144.9631],
+        zoom: 9,
+        minZoom: 4,
+        maxZoom: 12
+        }
         
+        var map = L.map('map', options);
+        
+            var tiles = L.tileLayer('http://a{s}.acetate.geoiq.com/tiles/acetate-hillshading/{z}/{x}/{y}.png', {
+            attribution: '&copy;2012 Esri & Stamen, Data from OSM and Natural Earth',
+            subdomains: '0123',
+            minZoom: 4,
+            maxZoom: 12
+        });
+        map.addLayer(tiles);
+    
         var iguanaZones = [
             {
                 name: 'lz1',
@@ -158,18 +174,46 @@
         
         
 //      steps 3 here
+//        var optionOne.setStyle({
+//            color: "#331ed7",
+//            weight: 15,
+//            fillColor: "#331ed7",
+//            fillOpacity:1
+//        });
+//        var optionTwo.setStyle({
+//            color: "#d72b1e",
+//            weight: 15,
+//            fillColor: "#d72b1e",
+//            fillOpacity:1
+//        });
+        
+        
 //      steps 4-6  here
-            
+        var iguanaLayerGroup=L.layerGroup();
+        for(var i=0; i<iguanaZones.length; i++) {
+            var lzName= iguanaZones[i].name;
+            var lzCoords= iguanaZones[i].coordinates;
+            var lzSize= iguanaZones[i].properties.size;
+            var lzIguana= L.circle(lzCoords,lzSize);
+            lzIguana.addTo(iguanaLayerGroup);
+           }
+         iguanaLayerGroup.addTo(map);
+        
+        
         var marker;  // keep this code
        
         map.on('click', function(e) {  // keep this code
 
-// uncomment this code after step seven is finished          
-//            if(map.hasLayer(marker)) {               
-//                map.removeLayer(marker);
-//            }
+ //uncomment this code after step seven is finished          
+            if(map.hasLayer(marker)) {               
+                map.removeLayer(marker);
+            }
 
-//              step seven here            
+//              step seven here
+            var currentCoords =  e.latlng;
+            map.setView(currentCoords, 6);
+            console.log("You clicked", currentCoords);
+            L.marker(currentCoords).addTo(map);
 //              step eight here
             
         });  // keep this code
