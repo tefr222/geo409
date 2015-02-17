@@ -211,17 +211,19 @@
 
 //              step seven here
             var currentCoords =  e.latlng;
-            map.setView(currentCoords, 6);
+           
+           
             console.log("You clicked", currentCoords);
             L.marker(currentCoords).addTo(map);
 //              step eight here
             
         });  // keep this code
         
-        function testDistance() {
+       function testDistance(currentCoords) {
             
             iguanaGroup.eachLayer(function(layer) {
 //              step 9 here
+             //   if(lzSize + 2200)
 //              step 10 here
             });
         }
