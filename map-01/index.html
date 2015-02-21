@@ -214,16 +214,27 @@
            
            
             console.log("You clicked", currentCoords);
-            L.marker(currentCoords).addTo(map);
+            marker=L.marker(currentCoords).addTo(map);
 //              step eight here
-            
+            testDistance(currentCoords);
         });  // keep this code
         
-       function testDistance(currentCoords) {
+       function testDistance() {
             
-            iguanaGroup.eachLayer(function(layer) {
+            iguanaLayerGroup.eachLayer(function(layer) {//changed from iguanaGroup to iguanaLayerGroup
 //              step 9 here
-             //   if(lzSize + 2200)
+                
+                    
+                
+                
+                
+                
+                
+                var radius=iguanaZones + 2200;
+                console.log(radius);
+              //  var safeZoneCheck= radius + 2200;
+               // console.log(safeZoneCheck);
+             //   if(getRadius() + 2200)
 //              step 10 here
             });
         }
