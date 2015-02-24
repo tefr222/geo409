@@ -50,18 +50,18 @@
 
 <body>
     <header>
-        <h1>Map Title</h1>
-        <h2>Map Subtitle</h2>
+        <h1>Iguana Attack Zones</h1>
+        <h2>For Runaway Country Music Fest Patrons</h2>
     </header>
 
     <div id='map'></div>
 
     <footer>
         
-// steps and 11 and 12 below        
-        <p>Map authored by YOUR NAME</p>
-        <p>Additional information about the data and map goes here.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna magna, maximus nec laoreet sit amet, dictum ultricies nibh. Ut id auctor lacus. Nam a dolor et justo luctus luctus. Duis a elit eget risus dictum vehicula id eu elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed sed enim nisl. Vestibulum commodo imperdiet lacus, sed facilisis erat placerat sit amet. Nulla consequat malesuada neque eget aliquet. Integer non convallis nisl, gravida ultrices ex. Fusce nec vestibulum elit. Sed elementum lectus ipsum, vulputate elementum ex laoreet a. Aenean eu ex varius, varius felis vitae, efficitur nulla. Quisque pretium laoreet ante, in sodales dui vehicula at. Mauris eu sem sapien.
+        
+        <p>Map authored by Taylor Franklin</p>
+        <p>WARNING: Attack Iguanas have been known to cause death.</p>
+        <p>This map is to help Runaway Country Music Fest goers avoid death by attack iguanas. Long live Lord Mayor Robert Doyle. 
         </p>
     </footer>
 
@@ -70,7 +70,7 @@
  // Step 1 and 2 here
         var options = {
         center: [-37.8136,144.9631],
-        zoom: 9,
+        zoom: 10.5,
         minZoom: 4,
         maxZoom: 12
         }
@@ -173,19 +173,19 @@
         ]; // end iguanaShips data
         
         
-//      steps 3 here
-//        var optionOne.setStyle({
-//            color: "#331ed7",
-//            weight: 15,
-//            fillColor: "#331ed7",
-//            fillOpacity:1
-//        });
-//        var optionTwo.setStyle({
-//            color: "#d72b1e",
-//            weight: 15,
-//            fillColor: "#d72b1e",
-//            fillOpacity:1
-//        });
+    //  steps 3 here
+        var optionOne={
+            color: "#331ed7",
+            weight: 15,
+            fillColor: "#331ed7",
+            fillOpacity:1
+        };
+        var optionTwo={
+            color: "#d72b1e",
+            weight: 15,
+            fillColor: "#d72b1e",
+            fillOpacity:1
+        };
         
         
 //      steps 4-6  here
@@ -219,23 +219,20 @@
             testDistance(currentCoords);
         });  // keep this code
         
-       function testDistance() {
+       function testDistance(currentCoords) {
             
             iguanaLayerGroup.eachLayer(function(layer) {//changed from iguanaGroup to iguanaLayerGroup
-//              step 9 here
-                
-                    
-                
-                
-                
-                
-                
-                var radius=iguanaZones + 2200;
-                console.log(radius);
-              //  var safeZoneCheck= radius + 2200;
-               // console.log(safeZoneCheck);
-             //   if(getRadius() + 2200)
-//              step 10 here
+                var newRadius= lzIguana.getRadius();
+                var dangerZone= newRadius + 2200;
+                ;
+                if(currentCoords>dangerZone){
+                    e.target.setStyle(optionOne).addTo(map);
+                } else if (currentCoords<dangerZone){
+                    e.target.setStyle(optionTwo).addTo(map);
+                }
+            console.log(layer);
+            console.log(dangerZone) 
+
             });
         }
         
