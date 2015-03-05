@@ -53,13 +53,17 @@
 
 <body>
     <header>
-        <!-- add HTML here-->
+        <h1>Energy Production</h1>
+        <h2>For Less Than 500 Megawatts</h2>
     </header>
 
-      <div id='map'></div><div id='map'></div>
+      <div id='map'></div>
 
     <footer>
-        <!-- add HTML here-->
+       <p>Map By: Taylor Franklin</p>
+        <p>This map is usefull in finding capacity information on powerplants that use natural gas.</p>
+        <p>This map will not tell you the distance from a city to a particular plant. I believe you would have to create a new layer and use the distanceTo method and filter out the plants that are less than what ever distance that you want.
+        </p>
     </footer>
     <script src="power-plants-assignment.js"></script>
     <script>
@@ -83,30 +87,56 @@
         plants.features.sort(function(a, b) {
         return b.properties.capacity - a.properties.capacity;
     });
-       
-        L.geoJson(plants, {
+        
+    L.geoJson(plants, {
         pointToLayer: function(feature,latlng) {
              return L.circleMarker(latlng, {
                  // options go here
-                 color: 'black',
-                     weight: 2,
-                     fillColor: 'red',
-                     fillOpacity: .5,
-                     radius: getRadius(features.properties.capacity)
+                color: 'green',
+                weight: 2,
+                fillColor: 'red',
+                fillOpacity: .5,
+                radius: getRadius(feature.properties.capacity)
              });
+            }, 
+        
+        filter: function(feature, layer) {
+            if((feature.properties.capacity <= 500)&&(feature.properties.source["Natural Gas"])){
+                return feature;   
+            }
         },
-        var dist= 
-            filter: function(feature, layer) {
-                if((feature.properties.capacity <= 500)&&(features.properties.source["Natural Gas"]){
-                  return feature;   
-                }
-                  },
-            onEachFeature: function(feature, layer){
-                var props = feature.properties;
-                var content = 
-            }).addTo(map);
-          
-        function getRadius(val)
+       
+        
+        onEachFeature: function(feature,layer) {
+            var props = feature.properties;
+            var content = "<b>"+props.plant_name+"</b><br>"+
+                    props.capacity.toLocaleString()+" MW<br>";
+            var source = props.source;
+            for(var fuel in source){
+                    content+="<b>"+fuel+"</b>: "+source[fuel].toLocaleString()+" MW<br>";
+            }
+            layer.bindPopup(content); 
+                
+            layer.on('mouseover', function() {
+            layer.setStyle({
+                fillColor: 'white'
+                });
+            });
+            layer.on('mouseout', function() {
+                layer.setStyle({
+                    fillColor: 'purple'
+                    });
+                });
+            }
+        
+        }).addTo(map);
+        
+        function getRadius(val) {
+            var radius= Math.sqrt(val/Math.PI);
+            return radius * .8;
+        }
+//          
+//    function getRadius(val)
         
     </script>
     
