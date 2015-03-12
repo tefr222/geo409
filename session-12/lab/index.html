@@ -152,6 +152,7 @@
         coalLayer.eachLayer(function(layer) {
             var distance = e.latlng.distanceTo(layer.getLatLng())/1000;
             var name= layer.feature.properties.plant_name;
+            var fuelSource=layer.feature.properties.fuel_source;
             console.log(name);
             if(distance > 500) {
                 layer.setStyle({
@@ -165,7 +166,7 @@
                     stroke: true,
                     fill: true  
                });  
-               layer.bindPopup("I am <b>"+distance.toLocaleString()+ 
+               layer.bindPopup("<b>"+name+"</b><br> Coal:"+ fuelSource.toLocaleString() + "I am <b>"+distance.toLocaleString()+ 
                                "km</b><br> from the click point.");
             } 
         });
@@ -175,7 +176,8 @@
         map.on('click', function(e) {
         windLayer.eachLayer(function(layer) {
             var distance = e.latlng.distanceTo(layer.getLatLng())/1000;
-
+            var name= layer.feature.properties.plant_name;
+            var fuelSource=layer.feature.properties.fuel_source;
             if(distance > 500) {
                 layer.setStyle({
                     stroke: false,
@@ -188,7 +190,7 @@
                     stroke: true,
                     fill: true  
                });  
-               layer.bindPopup("I am <b>"+distance.toLocaleString()+ 
+               layer.bindPopup("<b>"+name+"</b><br> wind:"+ fuelSource.toLocaleString() +"I am <b>"+distance.toLocaleString()+ 
                                "km</b><br> from the click point.");
             } 
         });
@@ -197,7 +199,8 @@
         map.on('click', function(e) {
         hydroLayer.eachLayer(function(layer) {
             var distance = e.latlng.distanceTo(layer.getLatLng())/1000;
-
+            var name= layer.feature.properties.plant_name;
+            var fuelSource=layer.feature.properties.fuel_source;
             if(distance > 500) {
                 layer.setStyle({
                     stroke: false,
@@ -210,7 +213,7 @@
                     stroke: true,
                     fill: true  
                });  
-               layer.bindPopup("I am <b>"+distance.toLocaleString()+ 
+               layer.bindPopup("<b>"+name+"</b><br> Hydro:"+ fuelSource.toLocaleString() +"I am <b>"+distance.toLocaleString()+ 
                                "km</b><br> from the click point.");
             } 
         });
@@ -219,7 +222,8 @@
         map.on('dblclick', function(e) {
         coalLayer.eachLayer(function(layer) {
             var distance = e.latlng.distanceTo(layer.getLatLng())/1000;
-
+            var name= layer.feature.properties.plant_name;
+            var fuelSource=layer.feature.properties.fuel_source;
             if(distance > 200) {
                 layer.setStyle({
                     stroke: false,
@@ -232,7 +236,7 @@
                     stroke: true,
                     fill: true  
                });  
-               layer.bindPopup("I am <b>"+distance.toLocaleString()+ 
+               layer.bindPopup("<b>"+name+"</b><br> Coal:"+ fuelSource.toLocaleString() +"I am <b>"+distance.toLocaleString()+ 
                                "km</b><br> from the click point.");
             } 
         });
@@ -240,7 +244,8 @@
         map.on('dblclick', function(e) {
         hydroLayer.eachLayer(function(layer) {
             var distance = e.latlng.distanceTo(layer.getLatLng())/1000;
-
+            var name= layer.feature.properties.plant_name;
+            var fuelSource=layer.feature.properties.fuel_source;
             if(distance > 200) {
                 layer.setStyle({
                     stroke: false,
@@ -253,7 +258,7 @@
                     stroke: true,
                     fill: true  
                });  
-               layer.bindPopup("I am <b>"+distance.toLocaleString()+ 
+               layer.bindPopup("<b>"+name+"</b><br> Hydro:"+ fuelSource.toLocaleString() +"I am <b>"+distance.toLocaleString()+ 
                                "km</b><br> from the click point.");
             } 
         });
@@ -261,7 +266,8 @@
         map.on('dblclick', function(e) {
         windLayer.eachLayer(function(layer) {
             var distance = e.latlng.distanceTo(layer.getLatLng())/1000;
-           
+            var name= layer.feature.properties.plant_name;
+            var fuelSource=layer.feature.properties.fuel_source;            
            if(distance > 200) {
                 layer.setStyle({
                     stroke: false,
@@ -275,7 +281,7 @@
                     fill: true  
                });  
                
-                layer.bindPopup("I am <b>"+distance.toLocaleString()+ 
+                layer.bindPopup("<b>"+name+"</b><br> wind"+ fuelSource.toLocaleString() +"I am <b>"+distance.toLocaleString()+ 
                                "km</b><br> from the click point.");
             } 
         });
