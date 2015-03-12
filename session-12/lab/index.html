@@ -55,16 +55,16 @@
 
 <body>
     <header>
-        <h1>Map Title</h1>
-        <h2>Map Subtitle</h2>
+        <h1>Energy Production</h1>
+        <h2>Coal, Wind, and Hydro</h2>
     </header>
 
     <div id='map'></div>
 
     <footer>
-        <p>Map authored by YOUR NAME</p>
-        <p>Additional information about the data and map goes here.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna magna, maximus nec laoreet sit amet, dictum ultricies nibh. Ut id auctor lacus. Nam a dolor et justo luctus luctus. Duis a elit eget risus dictum vehicula id eu elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed sed enim nisl. Vestibulum commodo imperdiet lacus, sed facilisis erat placerat sit amet. Nulla consequat malesuada neque eget aliquet. Integer non convallis nisl, gravida ultrices ex. Fusce nec vestibulum elit. Sed elementum lectus ipsum, vulputate elementum ex laoreet a. Aenean eu ex varius, varius felis vitae, efficitur nulla. Quisque pretium laoreet ante, in sodales dui vehicula at. Mauris eu sem sapien.
+        <p>Map authored by Taylor Franklin</p>
+        <p>This map shows coal, wind, and hydro powered power plants andvtheir capacity.</p>
+        <p>In addition to showing three diffrent kinds of plants this map also allows the user to click one and show all three types of the power plants within 500 km and a double click will show all power plants within 200 km.
         </p>
     </footer>
     <script src="power-plants.js"></script>
@@ -85,9 +85,9 @@
         // Begin writing your practice code here
        console.log(plants);
       var commonStyles = {
-             weight: 1,
-             stroke: 1,
-             fillOpacity: .8
+             weight: 2,
+             stroke: 2,
+             fillOpacity: .2
         }
 
         var hydroLayer = L.geoJson(plants, {
@@ -151,13 +151,16 @@
         map.on('click', function(e) {
         coalLayer.eachLayer(function(layer) {
             var distance = e.latlng.distanceTo(layer.getLatLng())/1000;
-
+            var name= layer.feature.properties.plant_name;
+            console.log(name);
             if(distance > 500) {
                 layer.setStyle({
                     stroke: false,
                     fill: false
                 });  
-            } else {
+            } 
+            
+            else {
                layer.setStyle({
                     stroke: true,
                     fill: true  
@@ -178,7 +181,9 @@
                     stroke: false,
                     fill: false
                 });  
-            } else {
+            } 
+            
+            else {
                layer.setStyle({
                     stroke: true,
                     fill: true  
@@ -198,7 +203,9 @@
                     stroke: false,
                     fill: false
                 });  
-            } else {
+            } 
+            
+            else {
                layer.setStyle({
                     stroke: true,
                     fill: true  
@@ -209,7 +216,7 @@
         });
     });
         
-         map.on('dblclick', function(e) {
+        map.on('dblclick', function(e) {
         coalLayer.eachLayer(function(layer) {
             var distance = e.latlng.distanceTo(layer.getLatLng())/1000;
 
@@ -218,7 +225,9 @@
                     stroke: false,
                     fill: false
                 });  
-            } else {
+            } 
+            
+            else {
                layer.setStyle({
                     stroke: true,
                     fill: true  
@@ -237,7 +246,9 @@
                     stroke: false,
                     fill: false
                 });  
-            } else {
+            } 
+            
+            else {
                layer.setStyle({
                     stroke: true,
                     fill: true  
@@ -250,22 +261,28 @@
         map.on('dblclick', function(e) {
         windLayer.eachLayer(function(layer) {
             var distance = e.latlng.distanceTo(layer.getLatLng())/1000;
-
-            if(distance > 200) {
+           
+           if(distance > 200) {
                 layer.setStyle({
                     stroke: false,
                     fill: false
                 });  
-            } else {
+            } 
+            
+            else {
                layer.setStyle({
                     stroke: true,
                     fill: true  
                });  
-               layer.bindPopup("I am <b>"+distance.toLocaleString()+ 
+               
+                layer.bindPopup("I am <b>"+distance.toLocaleString()+ 
                                "km</b><br> from the click point.");
             } 
         });
     });
+        
+        
+        
         function getRadius(val) {
             var radius = Math.sqrt(val/Math.PI);
             return radius * .8;   
