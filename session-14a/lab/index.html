@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8 />
+    <title>Task J starter template</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="simple_statistics.js"></script>
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: whitesmoke;
+            font-family: Lato, sans-serif;
+            color: #0D0000;
+        }
+        header {
+            padding: 6px 10%;
+        }
+        h1 {
+            display: inline-block;
+            margin-right: 20px;
+            color: #001323;
+        }
+        h2 {
+            display: inline-block;
+            color: #001323;
+        }
+        #map {
+            width: 960px;
+            height: 540px;
+            margin: 10px auto;
+            background: whitesmoke;
+            border: 2px solid #dddedf;
+        }
+        footer {
+            padding: 6px 10%;
+            width: 80%;
+        }
+        p {
+            font-size: 1em;
+            color: #001323;
+        }
+       
+        .legend {
+            padding: 6px 8px;
+            font-size: 1em;
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
+        .legend h3 {
+            font-size: 1.1em;
+            font-weight: normal;
+            color: #001323;
+            margin: 0;
+        }
+        .legend li {
+            list-style-type: none;
+            height: 22px;
+        }
+        .legend span {
+            width: 20px;
+            height: 20px;
+            float: left;
+            margin-right: 10px;
+        }
+        .leaflet-popup-content {
+            max-width: 160px;   
+        }
+         .info {
+        padding: 6px 8px;
+        font-size: 1em;
+        background: rgba(255,255,255,0.8);
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 5px;
+        text-align: right;   
+        }    
+        .info h3 {
+            margin:0;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Map Title</h1>
+        <h2>Map Subtitle</h2>
+    </header>
+
+    <div id='ui-controls'>
+     <label>Choose a data attribute:<br>
+        <select name="vacant">
+            <option value="VACANT_FOR" selected>vacant units for rent</option>
+            <option value="VACANT_REN">vacant units, rented not occupied</option> 
+            <option value="VACANT_FO2">vacant units, for sale only</option>
+            <option value="VACANT_SOL">vacant units, sole not occupied</option>
+            <option value="VACANT_SEA">vacant units used seasonally or for recreational use only</option> 
+            <option value="VACANT_MIG">vacant units used for migratory workers</option>
+            <option value="VACANT_OTH">vacant units, other</option>
+        </select>
+        </label>
+    </div>
+    
+    <div id='map'></div>
+
+    <footer>
+        <p>Map authored by YOUR NAME</p>
+        <p>Additional information about the data and map goes here.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna magna, maximus nec laoreet sit amet, dictum ultricies nibh. Ut id auctor lacus. Nam a dolor et justo luctus luctus. Duis a elit eget risus dictum vehicula id eu elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed sed enim nisl. Vestibulum commodo imperdiet lacus, sed facilisis erat placerat sit amet. Nulla consequat malesuada neque eget aliquet. Integer non convallis nisl, gravida ultrices ex. Fusce nec vestibulum elit. Sed elementum lectus ipsum, vulputate elementum ex laoreet a. Aenean eu ex varius, varius felis vitae, efficitur nulla. Quisque pretium laoreet ante, in sodales dui vehicula at. Mauris eu sem sapien.
+        </p>
+    </footer>
+
+    <script>
+        
+         var labels = {
+            "VACANT": "vacant units for rent",
+            "VACANT_REN": "% vacant units, rented not occupied",
+            "VACANT_REN": "% occupied housing units owned with mortgage",
+            "VACANT_FO2": "% vacant units, for sale only",
+            "VACANT_SOL": "% vacant units, sole not occupied",
+            "VACANT_SEA": "% vacant units used seasonally or for recreational use only",
+            "VACANT_MIG": "% vacant units used for migratory workers",
+            "VACANT_OTH": "% vacant units, other"
+        }
+            
+        var options = {
+            center: [38.2, -85.8],
+            zoom: 7.4,
+            minZoom: 7.4,
+            maxZoom: 7.4,
+            dragging: false,
+            zoomControl: false
+        }
+        var map = L.map('map', options);
+        
+        // Begin module 13 code here
+        
+        var dataLayer,
+            attribute = "OWNED_MORT",
+            norm = "OCCUPIED";
+//AJAX request to load external GEOJSON file 
+        $.getJSON("ky_counties_housing.json", function(data) {
+//create Leaflet geojson layer with geojson data and assign to global variable           
+            dataLayer = L.geoJson(data, {
+                 style: function(feature) {//style each feature of geojson layer
+                    return {
+                            color: '#dddddd',//set stroke color
+                            weight: 2,//set stroke weight
+                            fillOpacity: 1,//set fill opacity
+                            fillColor: '#1f78b4'//set fill color
+                        };
+                }          
+            }).addTo(map);//adds geojson layer to the map
+//Calls the ui function which allows the drop down box to appear 
+            ui();
+//Calls the drawLedgend function which takes the data and creates a ledgend            
+            drawLegend();
+//Calls the drawMap function and draws the map           
+            drawMap();
+//Calls the drawinfo function and supplys info on housig data to the legend
+            drawInfo();
+            
+        });
+//This function creates the county outline map          
+        function drawMap() {
+            
+            var breaks = getClassBreaks(); //breaks up the numerical data into different ranges
+
+            dataLayer.eachLayer(function(layer) {
+                
+                var props = layer.feature.properties;//makes a variable for the layer properties
+                
+                layer.setStyle({
+                    fillColor: getColor(props[attribute]/
+                                        props[norm], breaks)//creates fill color for counties, diffrent colors for diffrent values
+                });
+                 layer.bindPopup("<b>"+layer.feature.properties["NAME"]+" County</b></br>" +
+                        labels[attribute] + ": " + ((layer.feature.properties[attribute]/
+                                layer.feature.properties[norm])*100).toLocaleString()); //what creates the raw data for the counties in the upper right
+            layer.on('mouseover', function(e) {
+                e.target.setStyle({
+                    color: 'yellow',
+                    fillColor: getColor(props[attribute]/
+                                        props[norm], breaks)//makes it so that when you move the mouse over a county it colors the outline yellow but keeps the fill color what ever color it was before.
+                })
+//            layer.on('mouseout', function(e) {
+//                e.target.setStyle({
+//                    color: 'gray',
+//                    fillColor: getColor(props[attribute]/
+//                                        props[norm], breaks)
+//                }) //this comented piece should change the yellow outline bact to gray but is throwing an error with the draw info function.
+                updateInfo(this);//takes the script running below and updates the map within the context of "this"
+            });
+            });
+            
+            dataLayer.on('mouseover',function(){
+                
+                $(".info").show();//when your mouse 
+            });// makes it so that when you move your mouse over a county the info for that county shows up.
+            dataLayer.on('mouseout',function(){
+                $(".info").hide();
+            });//the info is removed when you move out of one county into another so the next county can be displayed.
+             
+            updateLegend(breaks);//calls the updateLedgend function and updates the data in the ledgend.
+           
+        }
+        
+      
+    function drawInfo() {// creates a function that places raw data about the county in the upper right
+        
+        var info = L.control({position: 'topright'});//makes a variable that gives details about the opsition of the data
+
+        info.onAdd = function(map) {//creates a function that takes the map and fills the information box
+
+            var div = L.DomUtil.create('div', 'info'); //calls the infor
+
+            return div;  //returns the info in the box
+
+        }
+        info.addTo(map);//adds the info onto the map
+        $(".info").hide();//removes the info once the user moves into another county.
+    }
+        
+        
+        function getClassBreaks() {//This function breaks the data into varying numerical ranges so a chloropleth map can be generated.
+            
+            var values = [];//creates a variable for the values
+            
+            dataLayer.eachLayer(function(layer) {
+                var value = layer.feature.properties[attribute]/layer.feature.properties[norm];
+                values.push(value);   
+            }); //places an attribute to each county probably numerical so the shading can take place later in the script.
+            
+            var breaks = ss.jenks(values, 5);//takes the data and breaks it up into five diffrent ranges of numbers.
+            return breaks;//returns the five diffrent ranges
+            
+        }   
+        
+        function getColor(d, breaks) {//this whole function just take the number 'd' and says if that less than or equal to a number in a particular break array then return a particular color else go to the next break range. It sends these colors back to the drawMap function and colors the map when you move your mouse over it and that sort of thing.
+            if(d <= breaks[1]) {
+                return '#f1eef6';
+            } else if(d <= breaks[2]) {
+                return '#bdc9e1';
+            } else if(d <= breaks[3]) {
+                return '#74a9cf';
+            } else if(d <= breaks[4]) {
+                return '#2b8cbe'
+            } else if(d <= breaks[5]) {
+                return '#045a8d'
+            }
+        }
+        
+        function drawLegend(breaks) {//takes the break arrays and uses them withing a function to draw the ledgent.
+            var legend = L.control({position: 'topleft'});//positions the ledgend.
+            legend.onAdd = function (map) {
+                var div = L.DomUtil.create('div', 'legend');
+                return div;
+            };//creates the ledgend
+            legend.addTo(map);//adds the ledgend to the map
+        }
+        
+        
+
+        function ui() {//allows the user to select several diffrent topics to look at.
+            var dataView = L.control({position: 'topleft'});//places where you will be able to see the data from
+            dataView.onAdd = function(map) {
+            var controls = L.DomUtil.get('ui-controls');
+            return controls;
+            }//generates the control for the drop down
+            dataView.addTo(map);//adds the drop down to the map.
+        }
+        
+        $('select[name="vacant"]').change(function() {
+            attribute=$(this).val();
+            drawMap();
+        })//this is geojson invoking the the diffrent data sets for the ui
+        
+    function updateLegend(breaks) {//this function updates the ledgent for the diffrent breaks that have been created.
+        var legend = $('.legend').html("<h3>" + labels[attribute] + "</h3><ul>");//creates a variable for the ledgend that refrences some html styling 
+        for (var i = 0; i < breaks.length-1; i++) {
+            var color = getColor(breaks[i + 1], breaks);
+            legend.append('<li><span style="background:' + color + '"></span> ' +
+                (breaks[i]*100).toLocaleString() + ' &mdash; ' + 
+                (breaks[i + 1]*100).toLocaleString() + '</li>');
+        }//generates a for loop that makes a diffrent color for each of the five diffrent breaks
+        legend.append("</ul>");//adds this styling to the ledgent.
+    } 
+        function updateInfo(layer) {// assigns cleaner names to the ledgend
+
+        var props = layer.feature.properties;
+
+        var html = "<h3>"+props['NAME']+" County</h3>"+
+                    "total # vacant units: <b>"+ props["VACANT"]+"</b><br>"+
+                    "# vacant units, rented not occupied <b>"+ props["VACANT_REN"]+"</b><br>"+
+                    "# vacant units, for sale only: <b>"+ props["VACANT_FO2"]+"</b><br>"+
+                    "# vacant units, sole not occupied: <b>"+ props["VACANT_SOL"]+"</b><br>"+
+                    "# vacant units used seasonally or for recreational use only: <b>"+ props["VACANT_SEA"]+"</b><br>"+
+                    "# vacant units used for migratory workers: <b>"+ props["VACANT_MIG"]+"</b><br>"+
+                    "# vacant units, other: <b>"+ props["VACANT_OTH"]+"</b>"
+
+        $(".info").html(html);//associates cleaner names with the less user friendly names from the data.
+    }
+        
+    </script>
+    
+</body>
+
+</html>
