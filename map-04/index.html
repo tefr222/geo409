@@ -60,19 +60,20 @@
     <script>
         
         var options = {
-            center: [38.2, -94],
-            zoom: 4,
-            minZoom: 4,
-            maxZoom: 6,
-            dragging: true,
-            zoomControl: true
+            center: [38.2, -85.8],
+            zoom: 7.4,
+            minZoom: 7.4,
+            maxZoom: 7.4,
+            dragging: false,
+            zoomControl: false
         }
-        var map = L.map('map', options);
+        
         
         // load map tiles and add to map
-                
+    var map = L.map('map', options);        
         // declare global variables
-
+//    var labels={
+        
         // AJAX requests to load data files
     $.getJSON("ky-counties.json", function(counties){
         
@@ -82,29 +83,160 @@
             complete: function(data){
                 
                 processData(counties, data);
+        console.log(counties, data);
+        dataLayer=L.geoJson(counties,{                          //last task added map t
+            style: function(feature){
+                return{
+                    color: '#dddddd',
+                    weight: 2,
+                    fillOpacity: 1,
+                    fillColor: '#1f78b4'
+                };
             }
+        }).addTo(map);
+            
+            
+            
+            
+            },
         });
-    })
-//    .fail(function(){
-//        console.log("Fail");
-//    });
+    });
+        
         // function to process/bind data
-    function processData(counties, data){
         
-    }
-        // function to draw the map
+   function processData(counties, data){
+        //console.log(counties, data);
         
-        // function to update the map
+        for(var county in counties.features){
+            var props= counties.features[county].properties;
+            
+            for(var d in data.data){
+                if(props.COUNTYFP==data.data[d].COUNTY_FIP){
+                    counties.features[county].properties=data.data[d];
+                    break;
+                }
+            }
+       }
+   }
+   console.log(processData());
+         //function to draw the map
         
-        // function get the class breaks   
-        
-        // function to get the color value
+//    function drawMap(){
+//        var breaks= getClassBreaks();
+//        dataLayer.eachLayer(function(layer){
+//            layer.setStyle({
+//                fillColor: getColor(layer.feature.properties[attribute]/
+//                                    layer.feature.properties[norm], breaks)
+//            });
+//            
+//            layer.bindPopup(
                 
-        // function to draw the legend
-        
-        // function to update the legend
-
-        // function to create the range slider
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+//        
+//        // function to update the map
+//        
+//        // function get the class breaks   
+//        function getClassBreaks() {
+//            
+//            // create empty Array for storing values
+//            var values = [];
+//            
+//            // loop through all the counties
+//            dataLayer.eachLayer(function(layer) {
+//                var value = layer.feature.properties[attribute]/layer.feature.properties[norm];
+//                values.push(value);   // push the normalized value for each layer into the Array
+//            }); 
+//            
+//            var breaks = ss.jenks(values, 7);  // determine the class breaks
+//            return breaks;  // return Array of class breaks
+//            
+//        }
+//        // function to get the color value
+//        function getColor(d, breaks) {
+//            // function accepts a single normalized data attribute value 
+//            // and uses a series of conditional statements to determine which 
+//            // which color value to return to return to the function caller
+//            
+//            if(d <= breaks[1]) {
+//                return '#f1eef6';
+//            } else if(d <= breaks[2]) {
+//                return '#bdc9e1';
+//            } else if(d <= breaks[3]) {
+//                return '#74a9cf';
+//            } else if(d <= breaks[4]) {
+//                return '#2b8cbe'
+//            } else if(d <= breaks[5]) {
+//                return '#045a8d'
+//            } else if(d <= breaks[6]) {
+//                return '#042e8d'
+//            } else if(d <= breaks[7]) {
+//                return '#030365'
+//            }    
+//        }        
+//        // function to draw the legend
+//         function drawLegend() {
+//            
+//            // create a new Leaflet control object, and position it top left
+//            var legend = L.control({position: 'topleft'});
+//            
+//            // when the legend is added to the map
+//            legend.onAdd = function(map) {
+//                
+//                // create a div element with an class attribute of legend
+//                var div = L.DomUtil.create('div', 'legend');
+//                
+//                // return the div to the method
+//                return div;
+//        
+//            };
+//            
+//            // add the empty legend div to the map
+//            legend.addTo(map);
+//        }
+//        // function to update the legend
+//        function updateLegend(breaks) {
+//            
+//            // select the legend, add a title, begin an unordered list and assign to a variable
+//            var legend = $('.legend').html("<h3>" + labels[attribute] + "</h3><ul>"); 
+//
+//            // loop through the Array of classification break values
+//            for (var i = 0; i < breaks.length-1; i++) {
+//                
+//                // get a color value for each
+//                var color = getColor(breaks[i + 1], breaks);
+//                
+//                // append a list item to the legend
+//                legend.append('<li><span style="background:' + color + '"></span> ' +
+//                    (breaks[i]*100).toLocaleString() + ' &mdash; ' + 
+//                    (breaks[i + 1]*100).toLocaleString() + '</li>');
+//            }
+//            
+//            // close the legend's unordered list
+//            legend.append("</ul>");
+//        }
+//        // function to create the range slider
 
     </script>
     

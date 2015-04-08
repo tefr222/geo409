@@ -83,8 +83,8 @@
                 complete: function(data) {
 
                     // data is accessible to us here
-                    console.log(data);
-
+                    processData(states, data);
+                    console.log(states,data);
                     // note that states is also accessible here!
 
                 }
@@ -92,20 +92,42 @@
 
         });// end of $.getJSON()
         
-        // function to process/bind data
-       for (var state in states.features) {
+//         function to process/bind data
+        function processData(states, data) {
 
-        var props = states.features[state].properties;
+            for (var state in states.features) {
+                var props = states.features[state].properties;
+                    for(var d in data.data) {
+                        if(props.STATEFP == data.data[d].STATE_FIP) {
+                        states.features[state].properties = data.data[d]; 
+                        break;
+                        }  
+                    } // inner for loop is complete
 
-        for(var d in data.data) {
-           if(props.STATEFP == data.data[d].STATE_FIP) {
-              states.features[state].properties = data.data[d]; 
-              break;
-           }  
-        } // inner for loop is complete
-
-    } // outer for loop is complete
-    console.log(states);
+            }    // outer for loop is complete
+            //console.log(states);
+        }
+ 
+            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         // function to draw the map
         
         // function to update the map
