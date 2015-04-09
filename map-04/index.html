@@ -96,14 +96,18 @@
             dragging: false,
             zoomControl: false
         }
+        var labels= {
+            "NAME": "% COUNTY",
+            "ANOTHER_ATTRIBUTE": "%ANOTHER ATTRIBUTE"   
+        }
         
         
         // brings in tiles and adds to map
         var map = L.map('map', options);        
         
         // declare global variables
-        var attribute= "Year"
-        
+        var attribute= "NAME"
+//        var norm= "CNTY"
         
         // AJAX requests to load data files
     $.getJSON("ky-counties.json", function(counties){
