@@ -144,6 +144,7 @@
                     };
                 }          
             }).addTo(map);
+            drawMap();
 
         });
         
@@ -153,11 +154,17 @@
             
             
             dataLayer.eachLayer(function(layer) {
+                var props = layer.feature.properties;
                 layer.setStyle({
-                    fillColor:  getColor(layer.feature.properties[attribute]/layer.feature.properties[norm], breaks)
+                    fillColor:  getColor(props[attribute]/props[norm], breaks)
                 });
+                layer.bindPopup("<b>"+props["NAME"]+" County</b></br>" +
+                                attribute + ": " +
+                                ((props[attribute]/props[norm])*100).toLocaleString());  
                 
             });
+            
+            drawLegend(breaks)
 
         }
 
