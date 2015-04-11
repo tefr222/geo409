@@ -70,7 +70,7 @@
  // Step 1 and 2 here
         var options = {
         center: [-37.8136,144.9631],
-        zoom: 10.5,
+        zoom: 10,
         minZoom: 4,
         maxZoom: 12
         }
@@ -222,16 +222,17 @@
        function testDistance(currentCoords) {
             
             iguanaLayerGroup.eachLayer(function(layer) {//changed from iguanaGroup to iguanaLayerGroup
-                var newRadius= lzIguana.getRadius();
-                var dangerZone= newRadius + 2200;
-                ;
-                if(currentCoords>dangerZone){
-                    e.target.setStyle(optionOne).addTo(map);
-                } else if (currentCoords<dangerZone){
-                    e.target.setStyle(optionTwo).addTo(map);
+                // determine distance between marker and layer
+                var distance = currentCoords.distanceTo(layer.getLatLng());
+                
+                // subtract radius from distance
+                distance = distance - layer.getRadius();
+                
+                if(distance < 2200){
+                    layer.setStyle(optionTwo);
+                } else {
+                    layer.setStyle(optionOne);
                 }
-            console.log(layer);
-            console.log(dangerZone) 
 
             });
         }
