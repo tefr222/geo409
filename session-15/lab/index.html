@@ -97,16 +97,22 @@
 
             for (var state in states.features) {
                 var props = states.features[state].properties;
+                console.log(props.StateFP);
                     for(var d in data.data) {
-                        if(props.STATEFP == data.data[d].STATE_FIP) {
-                        states.features[state].properties = data.data[d]; 
-                        break;
-                        }  
-                    } // inner for loop is complete
-
-            }    // outer for loop is complete
-            //console.log(states);
-        }
+                        console.log(data.data[d].STATE_FIP);
+                    }
+            }
+                        
+                        
+//                        if(props.STATEFP == data.data[d].STATE_FIP) {
+//                        states.features[state].properties = data.data[d]; 
+//                        break;
+//                        }  
+//                    } // inner for loop is complete
+//
+//            }    // outer for loop is complete
+//            //console.log(states);
+//        }
  
             
         

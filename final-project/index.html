@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+            
+            <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+            <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+            <script src="simple_statistics.js"></script>
+    
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.0/papaparse.min.js"></script>
+            <script src="https://code.jquery.com/jquery-1.11.2.min.js"> </script>
+            <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    
+           
+<head>
+    <meta charset=utf-8 />
+    <title>Module 13 Lab Template</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: whitesmoke;
+            font-family: Lato, sans-serif;
+            color: #0D0000;
+        }
+        header {
+            padding: 6px 10%;
+        }
+        h1 {
+            display: inline-block;
+            margin-right: 20px;
+            color: #001323;
+        }
+        h2 {
+            display: inline-block;
+            color: #001323;
+        }
+        #map {
+            width: 960px;
+            height: 540px;
+            margin: 10px auto;
+            background: whitesmoke;
+            border: 2px solid #dddedf;
+        }
+        footer {
+            padding: 6px 10%;
+            width: 80%;
+        }
+        p {
+            font-size: 1em;
+            color: #001323;
+        }
+        
+        /* ADD YOUR ADDITIONAL STYLE RULES HERE */
+        
+        .legend {
+        padding: 6px 8px;
+        font-size: 1em;
+        background: rgba(255,255,255,0.8);
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 5px;
+    }
+    .legend h3 {
+        font-size: 1.1em;
+        font-weight: normal;
+        color: #001323;
+        margin: 0;
+    }
+    .legend li {
+        list-style-type: none;
+        height: 22px;
+    }
+    .legend span {
+        width: 20px;
+        height: 20px;
+        float: left;
+        margin-right: 10px;
+    }
+        
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Map Title</h1>
+        <h2>Map Subtitle</h2>
+    </header>
+
+    <div id='map'></div>
+
+    <footer>
+        <p>Map authored by YOUR NAME</p>
+        <p>Additional information about the data and map goes here.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna magna, maximus nec laoreet sit amet, dictum ultricies nibh. Ut id auctor lacus. Nam a dolor et justo luctus luctus. Duis a elit eget risus dictum vehicula id eu elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed sed enim nisl. Vestibulum commodo imperdiet lacus, sed facilisis erat placerat sit amet. Nulla consequat malesuada neque eget aliquet. Integer non convallis nisl, gravida ultrices ex. Fusce nec vestibulum elit. Sed elementum lectus ipsum, vulputate elementum ex laoreet a. Aenean eu ex varius, varius felis vitae, efficitur nulla. Quisque pretium laoreet ante, in sodales dui vehicula at. Mauris eu sem sapien.
+        </p>
+    </footer>
+    
+    
+
+    <script>
+        
+        // WRITE YOUR CODE JAVASCRIPT CODE HERE
+    
+        jQuery("h1").html("Agriculture by State");
+        
+        var options = {
+            center: [39, -98],
+            zoom: 4.25,
+            minZoom: 1,
+            maxZoom: 20,
+            dragging: false,
+            zoomControl: false
+        }
+        var map = L.map('map', options);
+        
+
+
+
+    $.getJSON("us-states.json", function(states) {
+
+        Papa.parse('beef.csv', {
+            download: true,
+            header: true,
+            complete: function(data) {
+                
+                processData(states, data); 
+                
+
+               }
+        });
+        
+        
+        dataLayer = L.geoJson(states, {
+            style: function(feature) {
+                return {
+                    color: '#dddddd',
+                    weight: 1,
+                    fillOpacity: 1,
+                    fillColor: '#1f78b4'
+                };
+                
+            }          
+        }).addTo(map);
+           
+    });
+        
+    function processData(states, data) {
+        
+        for(var state in states.features){
+            var props=states.features[state].properties;
+            
+            for(var d in data.data){
+                if(props.name==data.data[d].name){
+                states.features[state].properties=data.data[d];
+                break;
+                }
+            }
+        
+        }
+        console.log(states);
+    };
+        
+function getClassBreaks(){
+    var values=[];
+    dataLayer.eachLayer(function(layer){
+        var value=layer.feature.properties
+    
+})
+}
+                        
+
+  
+    </script>
+    
+</body>
+
+</html>
