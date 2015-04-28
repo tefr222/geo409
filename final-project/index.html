@@ -82,6 +82,17 @@
         float: left;
         margin-right: 10px;
     }
+        #ui-controls {
+        width: 176px;   
+        padding: 8px 15px 8px 15px;
+        background: rgba(75,75,75,0.8);
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 5px; 
+        color: whitesmoke;
+    }
+    .year-slider {
+        width: 100%;
+    }
         
     </style>
 </head>
@@ -93,7 +104,10 @@
     </header>
 
     <div id='map'></div>
-
+    <div id="ui-controls">
+        <input type="range" min="2000", max="2013", 
+                value="2000", step="1" class="year-slider"></input>
+    </div>
     <footer>
         <p>Map authored by YOUR NAME</p>
         <p>Additional information about the data and map goes here.</p>
@@ -111,7 +125,7 @@
         
         var options = {
             center: [39, -98],
-            zoom: 4.25,
+            zoom: 4,
             minZoom: 1,
             maxZoom: 20,
             dragging: false,
@@ -121,9 +135,17 @@
         
         var dataLayer; // declare as global variable
         
+        var currentYear = 'beef_2000';
+        
+        $(".year-slider")
+        .on('input change', function() {
+            attribute = $(this).val();
+            updateMap();
+        });
+        
         $.getJSON("us-states.json", function(states) {
 
-            Papa.parse('beef.csv', {
+            Papa.parse('ag.csv', {
                 download: true,
                 header: true,
                 complete: function(data) {
@@ -140,23 +162,24 @@
             // first bind csv data to GeoJSON state geometries
             for(var state in states.features){
                 var props=states.features[state].properties;
-                console.log(props);
+//                console.log(props);
                 for(var d in data.data){
                     
                     // states name is caps NAME
-                    if(props.NAME==data.data[d].name){
+                    if(props.POSTAL==data.data[d].postal){
                         states.features[state].properties=data.data[d];
                         break;
                     }
                 }
 
             }
+            console.log(states);
             
         // then draw the the map
         dataLayer = L.geoJson(states, {
             style: function(feature) {
                 return {
-                    color: '#dddddd',
+                    color: '#6f6868',
                     weight: 1,
                     fillOpacity: 1,
                     fillColor: '#1f78b4'
@@ -164,18 +187,131 @@
                 
             }          
         }).addTo(map);
+        
+        updateMap();
+        
     };
+        
+    function updateMap(){
+        
+        var breaks = getClassBreaks();
+        console.log(breaks);
+        
+        dataLayer.eachLayer(function(layer){
+            layer.setStyle({
+                fillColor: getColor(layer.feature.properties[currentYear], breaks)
+    })
+        })
+        
+        drawLegend(breaks);
+        createSliderUI();
+    }
         
     function getClassBreaks(){
         var values=[];
         dataLayer.eachLayer(function(layer){
-            var value=layer.feature.properties
-
-        })
+            values.push(Number(layer.feature.properties[currentYear]));
+        });
+      
+        var breaks = ss.quantile(values, [0, 0.2, 0.4, 0.6, 0.8, 1]);
+        return breaks;
     }
-                        
+        
+    function getColor(d, breaks) {
+        console.log(breaks);
+        if(d <= breaks[1]) {
+            return '#f1eef6';
+        } else if(d <= breaks[2]) {
+            return '#bdc9e1';
+        } else if(d <= breaks[3]) {
+            return '#74a9cf';
+        } else if(d <= breaks[4]) {
+            return '#2b8cbe'
+        } else if(d <= breaks[5]) {
+            return '#045a8d'
+        }
+    }
+    
+    function drawLegend(breaks){
 
-  
+        // create a new Leaflet control object, and position it top left
+        var legend = L.control({position: 'topleft'});
+
+        // when the legend is added to the map
+        legend.onAdd = function (map) {
+
+            // create a new HTML <div> element and give it a class name of "legend"
+            var div = L.DomUtil.create('div', 'legend');
+
+            // first append an <h3> tag to the div holding the current attribute 
+            // and norm values (i.e., the mapped phenenomena) and begin an
+            // un-ordered list (<ul>)
+            div.innerHTML = "<h3>" + "Production" + "</h3><ul>"; 
+console.log(breaks);
+            // for each of our breaks
+            for (var i = 0; i < breaks.length-1; i++) {
+                // determine the color associated with each break value,
+                // including the lower range value
+                var color = getColor(breaks[i + 1], breaks);
+
+                // concatenate a list item (<li>) to the div containing 
+                // an <i> tag styled with the color and include the range values
+                // of that particular classification group
+                div.innerHTML +=
+                    '<li><span style="background:' + color + '"></span> ' +
+                    (breaks[i]*100).toLocaleString() + ' &mdash; ' + 
+                    (breaks[i + 1]*100).toLocaleString() + '</li>';
+            }
+
+            // close the un-ordered list
+            div.innerHTML += "</ul>"
+
+            // return the populated div to be added to the map
+            return div;
+        };
+
+        // add the legend to the map
+        legend.addTo(map);
+    }
+        
+        
+           
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+    function createSliderUI(){    
+    // create a Leaflet control object and store a reference to it in a variable
+    var sliderControl = L.control({ position: 'bottomleft'} );
+
+        // when we add this control object to the map
+        sliderControl.onAdd = function(map) {
+
+            // select an existing DOM element with an id of "ui-controls"
+            var slider = L.DomUtil.get("ui-controls");
+
+            // when the user clicks on the slider element
+            L.DomEvent.addListener(slider, 'mousedown', function(e) { 
+
+            // prevent the click event from bubbling up to the map
+            L.DomEvent.stopPropagation(e); 
+
+            });
+
+            // return the slider from the onAdd method
+            return slider;
+        }
+
+        // add the control object containing our slider element to the map
+        sliderControl.addTo(map);
+
+    }
     </script>
     
 </body>
