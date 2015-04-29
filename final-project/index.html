@@ -93,7 +93,14 @@
     .year-slider {
         width: 100%;
     }
-        
+    .info {
+        padding: 6px 8px;
+        font-size: 1em;
+        background: rgba(255,255,255,0.8);
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 5px;
+        text-align: right;   
+    }    
     </style>
 </head>
 
@@ -104,10 +111,12 @@
     </header>
 
     <div id='map'></div>
+<!--
     <div id="ui-controls">
         <input type="range" min="2000", max="2013", 
                 value="2000", step="1" class="year-slider"></input>
     </div>
+-->
     <footer>
         <p>Map authored by YOUR NAME</p>
         <p>Additional information about the data and map goes here.</p>
@@ -137,11 +146,11 @@
         
         var currentYear = 'beef_2000';
         
-        $(".year-slider")
-        .on('input change', function() {
-            attribute = $(this).val();
-            updateMap();
-        });
+//        $(".year-slider")
+//        .on('input change', function() {
+//            attribute = $(this).val();
+//            updateMap();
+//        });
         
         $.getJSON("us-states.json", function(states) {
 
@@ -204,7 +213,8 @@
         })
         
         drawLegend(breaks);
-        createSliderUI();
+//        createSliderUI();
+        updateInfo();
     }
         
     function getClassBreaks(){
@@ -275,43 +285,53 @@ console.log(breaks);
     }
         
         
-           
+//    function createSliderUI(){    
+//    // create a Leaflet control object and store a reference to it in a variable
+//    var sliderControl = L.control({ position: 'bottomleft'} );
+//
+//        // when we add this control object to the map
+//        sliderControl.onAdd = function(map) {
+//
+//            // select an existing DOM element with an id of "ui-controls"
+//            var slider = L.DomUtil.get("ui-controls");
+//
+//            // when the user clicks on the slider element
+//            L.DomEvent.addListener(slider, 'mousedown', function(e) { 
+//
+//            // prevent the click event from bubbling up to the map
+//            L.DomEvent.stopPropagation(e); 
+//
+//            });
+//
+//            // return the slider from the onAdd method
+//            return slider;
+//        }
+//
+//        // add the control object containing our slider element to the map
+//        sliderControl.addTo(map);
+//
+//    }
+        
+        function drawInfo() {
+            var info = L.control({position: 'topright'});
+            info.onAdd = function(map) {
+                var div = L.DomUtil.create('div', 'info');
+                return div;  
+            }
+        info.addTo(map);
+    }   
+        
+       function updateInfo(layer) {
+           var props = layer.features.properties;
+           var html = "<h3>"+props['postal']+" County</h3>"+
+                    "total Precentage of Beef: <b>"+ props["beef_2000"]+"</b><br>"+
+                    "total Precentage of Pork: <b>"+ props["pork_2000"]+"</b><br>"+
+                    "#total Precentage of Poultry: <b>"+ props["poultry_2000"]+"</b>"
+        $(".info").html(html);
+    } 
         
         
         
-        
-        
-        
-    
-        
-        
-        
-    function createSliderUI(){    
-    // create a Leaflet control object and store a reference to it in a variable
-    var sliderControl = L.control({ position: 'bottomleft'} );
-
-        // when we add this control object to the map
-        sliderControl.onAdd = function(map) {
-
-            // select an existing DOM element with an id of "ui-controls"
-            var slider = L.DomUtil.get("ui-controls");
-
-            // when the user clicks on the slider element
-            L.DomEvent.addListener(slider, 'mousedown', function(e) { 
-
-            // prevent the click event from bubbling up to the map
-            L.DomEvent.stopPropagation(e); 
-
-            });
-
-            // return the slider from the onAdd method
-            return slider;
-        }
-
-        // add the control object containing our slider element to the map
-        sliderControl.addTo(map);
-
-    }
     </script>
     
 </body>
