@@ -321,12 +321,12 @@ console.log(breaks);
         info.addTo(map);
     }   
         
-       function updateInfo(layer) {
-           var props = layer.features.properties;
+       function updateInfo() {
+           var props = dataLayer.eachLayer;
            var html = "<h3>"+props['postal']+" County</h3>"+
                     "total Precentage of Beef: <b>"+ props["beef_2000"]+"</b><br>"+
                     "total Precentage of Pork: <b>"+ props["pork_2000"]+"</b><br>"+
-                    "#total Precentage of Poultry: <b>"+ props["poultry_2000"]+"</b>"
+                    "total Precentage of Poultry: <b>"+ props["poultry_2000"]+"</b>"
         $(".info").html(html);
     } 
         
