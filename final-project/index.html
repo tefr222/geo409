@@ -231,7 +231,7 @@
             });
             
             layer.on('mouseout', function() {
-                layer.setStyle({color: '#dddddd'});
+                layer.setStyle({color: '#6f6868'});
             });
             
         });
@@ -316,7 +316,7 @@
        function updateInfo(layer) {
            var props = layer.feature.properties;
            var html = "<h3>"+props["name"]+" State</h3>"+
-                    "Total Precentage of Beef: <b>"+ (props[currentYear]*100)+"</b><br>"+
+                    "Total Precentage of Beef: <b>"+ (props["beef_2000"]*100)+"</b><br>"+
                     "Total Precentage of Pork: <b>"+ (props["pork_2000"]*100)+"</b><br>"+
                     "Total Precentage of Poultry: <b>"+ (props["poultry_2000"]*100)+"</b>"
         $(".info").html(html);
