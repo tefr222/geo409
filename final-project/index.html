@@ -150,20 +150,18 @@
             zoomControl: false
         }
         
+        var labels = {
+            "beef_2000": "% Beef Production (By Revenue)",
+            "poultry_2001": "% Poultry Production (By Revenue)",
+            "pork_2001": "% Pork Production (By Revenue)"
+        }
+        
         //Creats a variable for the map to be used below
         var map = L.map('map', options);
         
         //creates a global variable
-        var dataLayer; 
-        
-        //creates a variable so we can get one type and one year running correct
-        var currentYear = 'beef_2000';
-        
-//        $(".year-slider")
-//        .on('input change', function() {
-//            attribute = $(this).val();
-//            updateMap();
-//        });
+        var dataLayer,
+            currentYear= "beef_2000"; 
         
         //uses json file to draw map lines
         $.getJSON("us-states.json", function(states) {
@@ -173,8 +171,6 @@
                 download: true,
                 header: true,
                 complete: function(data) {
-                    
-                    //sends both data from json and csv so it can be combined
                     processData(states, data); 
                 }
             });
@@ -182,7 +178,7 @@
         
         function processData(states, data) {
         
-            // Binds csv data to GeoJSON state geometries
+            
             for(var state in states.features){
                 var props=states.features[state].properties;
 //                console.log(props);
@@ -206,25 +202,27 @@
                     };
                 }          
             }).addTo(map);
-        drawLegend();
+            ui();
+            drawLegend();
 //        createSliderUI();
-        drawInfo();
-         ui();
             updateMap();
+            drawInfo();
+        
+            
         
     };
         
     function updateMap(){
         
         var breaks = getClassBreaks();
-//        console.log(breaks);
         
         dataLayer.eachLayer(function(layer){
             layer.setStyle({
                 fillColor: getColor(layer.feature.properties[currentYear], breaks)
             });
             layer.bindPopup("<b>"+layer.feature.properties["NAME"]+" State</b></br>" +
-                                "Beef" + ": " + (layer.feature.properties[currentYear]).toLocaleString());
+                                labels[currentYear] + ": " + (layer.feature.properties[currentYear]).toLocaleString());
+            
             
             layer.on('mouseover', function() {
                 updateInfo(this); 
@@ -275,38 +273,7 @@
             return '#045a8d';
         }
     }
-    
-//    function drawLegend(){
-//
-//        var legend = L.control({position: 'topleft'});
-//
-//        legend.onAdd = function (map) {
-//
-//            var div = L.DomUtil.create('div', 'legend');
-//
-//            div.innerHTML = "<h3>" + "Production" + "</h3><ul>"; 
-//            
-//            console.log(breaks);
-//            
-//
-//            for (var i = 0; i < breaks.length-1; i++) {
-//                var color = getColor(breaks[i + 1], breaks);
-//                div.innerHTML +=
-//                    '<li><span style="background:' + color + '"></span> ' +
-//                    (breaks[i]*100).toLocaleString() + ' &mdash; ' + 
-//                    (breaks[i + 1]*100).toLocaleString() + '</li>';
-//            }
-//
-//            
-//            div.innerHTML += "</ul>"
-//            
-//            return div;
-//        };
-//
-//        legend.addTo(map);
-//    }
-       
-        
+     
         function drawLegend() {
 
             var legend = L.control({position: 'topleft'});
@@ -325,7 +292,7 @@
         
     function updateLegend(breaks) {
 
-        var legend = $('.legend').html("<h3>" + currentYear + "</h3><ul>"); 
+        var legend = $('.legend').html("<h3>" + labels[currentYear] + "</h3><ul>"); 
 
         for (var i = 0; i < breaks.length-1; i++) {
             var color = getColor(breaks[i + 1], breaks);
@@ -335,35 +302,6 @@
         }
         legend.append("</ul>");
     }
-  
-        
-        
-//    function createSliderUI(){    
-//    // create a Leaflet control object and store a reference to it in a variable
-//    var sliderControl = L.control({ position: 'bottomleft'} );
-//
-//        // when we add this control object to the map
-//        sliderControl.onAdd = function(map) {
-//
-//            // select an existing DOM element with an id of "ui-controls"
-//            var slider = L.DomUtil.get("ui-controls");
-//
-//            // when the user clicks on the slider element
-//            L.DomEvent.addListener(slider, 'mousedown', function(e) { 
-//
-//            // prevent the click event from bubbling up to the map
-//            L.DomEvent.stopPropagation(e); 
-//
-//            });
-//
-//            // return the slider from the onAdd method
-//            return slider;
-//        }
-//
-//        // add the control object containing our slider element to the map
-//        sliderControl.addTo(map);
-//
-//    }
         
         function drawInfo() {
             var info = L.control({position: 'topright'});
@@ -372,15 +310,15 @@
                 return div;  
             }
         info.addTo(map);
-            $(".info")
+            $(".info").hide();
     }   
         
        function updateInfo(layer) {
            var props = layer.feature.properties;
            var html = "<h3>"+props["name"]+" State</h3>"+
                     "Total Precentage of Beef: <b>"+ (props[currentYear]*100)+"</b><br>"+
-                    "Total Precentage of Pork: <b>"+ (props["pork_2000"]*100)+"</b><br>"+
-                    "Total Precentage of Poultry: <b>"+ (props["poultry_2000"]*100)+"</b>"
+                    "Total Precentage of Pork: <b>"+ (props[currentYear]*100)+"</b><br>"+
+                    "Total Precentage of Poultry: <b>"+ (props[currentYear]*100)+"</b>"
         $(".info").html(html);
            
     } 
@@ -396,11 +334,9 @@
 
             dataView.addTo(map);
              $('select[name="protein"]').change(function() {
-                
-                // re-assign the value based off user's selection
+    
                 currentYear = $(this).val();
                 
-                // update the map
                 updateMap();
                 
             });
