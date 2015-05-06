@@ -107,7 +107,7 @@
 <body>
     <header>
         <h1>Map Title</h1>
-        <h2>Map Subtitle</h2>
+        <h2>Beef, Poultry, and Pork</h2>
     </header>
 <div id='ui-controls'>
      <label>Choose a data attribute:<br>
@@ -126,9 +126,9 @@
     </div>
 -->
     <footer>
-        <p>Map authored by YOUR NAME</p>
-        <p>Additional information about the data and map goes here.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna magna, maximus nec laoreet sit amet, dictum ultricies nibh. Ut id auctor lacus. Nam a dolor et justo luctus luctus. Duis a elit eget risus dictum vehicula id eu elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed sed enim nisl. Vestibulum commodo imperdiet lacus, sed facilisis erat placerat sit amet. Nulla consequat malesuada neque eget aliquet. Integer non convallis nisl, gravida ultrices ex. Fusce nec vestibulum elit. Sed elementum lectus ipsum, vulputate elementum ex laoreet a. Aenean eu ex varius, varius felis vitae, efficitur nulla. Quisque pretium laoreet ante, in sodales dui vehicula at. Mauris eu sem sapien.
+        <p>Map authored by Taylor Franklin</p>
+       
+        <p>This interactive map uses data provided by the USDA Economic Research Service and the USDA Foreign Agricultural Service (Global Agricultrual Trade System) to provide a visual map of the precentages of agricultural revenue that beef, poultry, and pork account for by each individual state for the year 2000. This map allowes the user to compare the production of each individual product by state and through a popup window it allows the user to compare the production by each meat type.
         </p>
     </footer>
     
@@ -138,11 +138,11 @@
         
         // WRITE YOUR CODE JAVASCRIPT CODE HERE
         //Creates Title
-        jQuery("h1").html("Agriculture by State");
+        jQuery("h1").html("Meat Produced by State in 2000");
         
         //Options for the Map
         var options = {
-            center: [39, -98],
+            center: [39, -99],
             zoom: 4,
             minZoom: 1,
             maxZoom: 20,
@@ -151,9 +151,9 @@
         }
         
         var labels = {
-            "beef_2000": "% Beef Production (By Revenue)",
-            "poultry_2000": "% Poultry Production (By Revenue)",
-            "pork_2000": "% Pork Production (By Revenue)"
+            "beef_2000": "% Beef of Agricultural Revenue",
+            "poultry_2000": "% Poultry Agricultural Revenue",
+            "pork_2000": "% Pork Agricultural Revenue"
         }
         
         //Creats a variable for the map to be used below
@@ -220,7 +220,7 @@
             layer.setStyle({
                 fillColor: getColor(layer.feature.properties[currentYear], breaks)
             });
-            layer.bindPopup("<b>"+layer.feature.properties["NAME"]+" State</b></br>" +
+            layer.bindPopup("<b>"+"State:"+layer.feature.properties["NAME"]+"</b>"+ "</br>" +
                                 labels[currentYear] + ": " + (layer.feature.properties[currentYear]).toLocaleString());
             
             
@@ -264,19 +264,19 @@
         if(d <= breaks[1]) {
             return '#f1eef6';
         } else if(d <= breaks[2]) {
-            return '#bdc9e1';
+            return '#ffbecb';
         } else if(d <= breaks[3]) {
-            return '#74a9cf';
+            return '#ff7d7d';
         } else if(d <= breaks[4]) {
-            return '#2b8cbe';
+            return '#ff3c48';
         } else if(d <= breaks[5]) {
-            return '#045a8d';
+            return '#ff000f';
         }
     }
      
         function drawLegend() {
 
-            var legend = L.control({position: 'topleft'});
+            var legend = L.control({position: 'bottomleft'});
 
             legend.onAdd = function(map) {
 
@@ -315,7 +315,7 @@
         
        function updateInfo(layer) {
            var props = layer.feature.properties;
-           var html = "<h3>"+props["name"]+" State</h3>"+
+           var html = "<h3>"+"State: " +props["name"]+" </h3>"+
                     "Total Precentage of Beef: <b>"+ (props["beef_2000"]*100)+"</b><br>"+
                     "Total Precentage of Pork: <b>"+ (props["pork_2000"]*100)+"</b><br>"+
                     "Total Precentage of Poultry: <b>"+ (props["poultry_2000"]*100)+"</b>"
