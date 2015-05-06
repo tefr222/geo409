@@ -136,11 +136,11 @@
 
     <script>
         
-        // WRITE YOUR CODE JAVASCRIPT CODE HERE
-        //Creates Title
+      
+        //Creates a title
         jQuery("h1").html("Meat Produced by State in 2000");
         
-        //Options for the Map
+        //Options for the map
         var options = {
             center: [39, -99],
             zoom: 4,
@@ -149,7 +149,7 @@
             dragging: false,
             zoomControl: false
         }
-        
+        //Labels for the ledgend
         var labels = {
             "beef_2000": "% Beef of Agricultural Revenue",
             "poultry_2000": "% Poultry Agricultural Revenue",
@@ -175,13 +175,13 @@
                 }
             });
         });
-        
+        //This function takes the ag information and puts it with a polygon defined by the json file
         function processData(states, data) {
         
-            
+            //Uses a double for loop to join together the features that have the same postal code 
             for(var state in states.features){
                 var props=states.features[state].properties;
-//                console.log(props);
+
                 for(var d in data.data){
                     if(props.POSTAL==data.data[d].postal){
                         states.features[state].properties=data.data[d];
@@ -190,8 +190,8 @@
                 }
 
             }
-            console.log(states);
-            
+    
+            //Creates a data layer that places the data on the map and assigns some colors
             dataLayer = L.geoJson(states, {
                 style: function(feature) {
                     return {
@@ -202,53 +202,59 @@
                     };
                 }          
             }).addTo(map);
+            //Calls a function that will handel our drop down menu to select the type of protein we want to view
             ui();
+            //Calls a function that will draw the legend for us
             drawLegend();
 //        createSliderUI();
+            //calls a function that will add some additional features to our map
             updateMap();
+            //calls a function that will create the info for our ledgend
             drawInfo();
         
             
         
     };
-        
+    //This funciton creates a popup to add additional information by hovering over each state.    
     function updateMap(){
-        
+        //assigns the getclassbreaks function to a variable
         var breaks = getClassBreaks();
-        
+        //uses the .eachLayer function to assign a color to make our map a choropleth map
         dataLayer.eachLayer(function(layer){
             layer.setStyle({
                 fillColor: getColor(layer.feature.properties[currentYear], breaks)
             });
+            //this creates a popup that will display the state name and the details about each type of production in that state
             layer.bindPopup("<b>"+"State:"+layer.feature.properties["NAME"]+"</b>"+ "</br>" +
                                 labels[currentYear] + ": " + (layer.feature.properties[currentYear]).toLocaleString());
             
             
+            //allows the map to highlight the boarder of the state in blue when a mouse passes over it.
             layer.on('mouseover', function() {
                 updateInfo(this); 
                 
-                layer.setStyle({color: 'yellow'}).bringToFront();  
+                layer.setStyle({color: 'blue'}).bringToFront();  
             });
-            
+            //changes the color back to its original color when the mouse leave that area.
             layer.on('mouseout', function() {
                 layer.setStyle({color: '#6f6868'});
             });
             
         });
-        
+        //when the mouse goes over the state it pops up a window telling about the production in each state.
         dataLayer.on('mouseover', function() {
             $(".info").show();
         });    
-        
+        //removes that window after the mouse moves out of that area so the windows dont get stacked ontop of each other.
         dataLayer.on('mouseout', function() {
             $(".info").hide();
         });
         
         
-        
+        //runs though the updateLegend function so that the the new info can be updated.
         updateLegend(breaks);
     }
-        
+    //uses the ss.quantile to sort and make an array of the data in five different ranges.     
     function getClassBreaks(){
         var values=[];
         dataLayer.eachLayer(function(layer){
@@ -258,7 +264,7 @@
         var breaks = ss.quantile(values, [0, 0.2, 0.4, 0.6, 0.8, 1]);
         return breaks;
     }
-        
+      //assigns a color to the class breaks just made.  
     function getColor(d, breaks) {
 //        console.log(breaks);
         if(d <= breaks[1]) {
@@ -273,7 +279,7 @@
             return '#ff000f';
         }
     }
-     
+    //draws a ledgend in the bottom left corner of the mad fillind the empty div container. 
         function drawLegend() {
 
             var legend = L.control({position: 'bottomleft'});
@@ -285,15 +291,15 @@
                 return div;
 
         };
-
+            //adds map to legend 
         legend.addTo(map);
     }
         
-        
+    //updates the legend with the different classes assigned in the getClassBreaks function   
     function updateLegend(breaks) {
-
+    //takes the ledgend and assigns it a title
         var legend = $('.legend').html("<h3>" + labels[currentYear] + "</h3><ul>"); 
-
+        //takes the data and makes it a precentage instead of a decimal precentage for the legend. 
         for (var i = 0; i < breaks.length-1; i++) {
             var color = getColor(breaks[i + 1], breaks);
             legend.append('<li><span style="background:' + color + '"></span> ' +
@@ -302,7 +308,7 @@
         }
         legend.append("</ul>");
     }
-        
+        //creates an empty div container for the info panel
         function drawInfo() {
             var info = L.control({position: 'topright'});
             info.onAdd = function(map) {
@@ -312,7 +318,7 @@
         info.addTo(map);
             $(".info").hide();
     }   
-        
+        //fills the empty div container to display the the information about the proteins raised in each state. also converts the info from decimal precent to precent.  
        function updateInfo(layer) {
            var props = layer.feature.properties;
            var html = "<h3>"+"State: " +props["name"]+" </h3>"+
@@ -322,7 +328,7 @@
         $(".info").html(html);
            
     } 
-     
+    //creates the drop down menu that allows the user to select the protein they want to see nationally. 
         function ui() {
             var dataView = L.control({position: 'bottomleft'});
 
@@ -336,7 +342,7 @@
              $('select[name="protein"]').change(function() {
     
                 currentYear = $(this).val();
-                
+                //calls the update map function to run with the new drop down menu.
                 updateMap();
                 
             });
